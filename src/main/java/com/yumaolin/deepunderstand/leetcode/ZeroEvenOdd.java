@@ -1,20 +1,23 @@
 package com.yumaolin.deepunderstand.leetCode;
 
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntConsumer;
 
 
 /**
- * 1116. 打印零与奇偶数 用CountDownLatch Semaphore也能实现
- * 
+ * 1116. 打印零与奇偶数 
+ * 用CountDownLatch,Semaphore,AtomicInteger也能实现
  * @author yuml
  * @since 2019年9月17日
  */
 public class ZeroEvenOdd {
 
-	private AtomicInteger COUNT = new AtomicInteger(2);
+	private CyclicBarrier countDownLatchA = new CyclicBarrier(1);
+	private CyclicBarrier countDownLatchB = new CyclicBarrier(2);
+	private CyclicBarrier countDownLatchC = new CyclicBarrier(2);
 
 	private int n;
 
@@ -24,45 +27,48 @@ public class ZeroEvenOdd {
 
 	// printNumber.accept(x) outputs "x", where x is an integer.
 	public void zero(IntConsumer printNumber) throws InterruptedException {
-		for (int i = 0; i < n; i++) {
-			while (true) {
-				if (COUNT.compareAndSet(2, 5)) {
-					printNumber.accept(0);
-					int j = (i + 1) % 2;
-					COUNT.compareAndSet(5, j);
-					break;
-				}else {
-					Thread.yield();
+		try {
+			for (int i = 0; i < n; i++) {
+				countDownLatchA.await();
+				if (countDownLatchA.getParties() == 1) {
+					countDownLatchA = new CyclicBarrier(2);
+				}
+				if (i == n - 1) {
+					countDownLatchA = new CyclicBarrier(1);
+				}
+				printNumber.accept(0);
+				if (i % 2 == 0) {
+					countDownLatchB.await(); // 激活打印奇数的方法
+				} else {
+					countDownLatchC.await();
 				}
 			}
+		} catch (BrokenBarrierException e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void even(IntConsumer printNumber) throws InterruptedException {
-		for (int i = 2; i <= n; i += 2) {
-			while (true) {
-				if (COUNT.compareAndSet(0, 5)) {
-					printNumber.accept(i);
-					COUNT.compareAndSet(5, 2);
-					break;
-				}else {
-					Thread.yield();
-				}
+		try {
+			for (int i = 2; i <= n; i = i + 2) {
+				countDownLatchC.await();
+				printNumber.accept(i);
+				countDownLatchA.await();
 			}
+		} catch (BrokenBarrierException e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void odd(IntConsumer printNumber) throws InterruptedException {
-		for (int i = 1; i <= n; i += 2) {
-			while (true) {
-				if (COUNT.compareAndSet(1, 5)) {
-					printNumber.accept(i);
-					COUNT.compareAndSet(5, 2);
-					break;
-				}else {
-					Thread.yield();
-				}
+		try {
+			for (int i = 1; i <= n; i = i + 2) {
+				countDownLatchB.await();
+				printNumber.accept(i);
+				countDownLatchA.await();
 			}
+		} catch (BrokenBarrierException e) {
+			e.printStackTrace();
 		}
 	}
 
