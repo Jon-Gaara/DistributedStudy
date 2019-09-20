@@ -29,6 +29,10 @@ public class KafkaProduceClient {
 		//properties.put(ProducerConfig.CLIENT_ID_CONFIG, "kafka.client.id.testTopic");
 		//设置 拦截器
 		properties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, CustomProduceInterceptor.class.getName());
+		//设置 幂等 客户端确保 retries>0,acks=-1,max.in.flight.request.per.connection<=5 
+		properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+		//开启事务
+		properties.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, "transactionalId");
 		return properties;
 	}
 	

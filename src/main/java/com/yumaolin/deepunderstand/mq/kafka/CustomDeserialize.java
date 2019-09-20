@@ -6,18 +6,18 @@ import org.apache.kafka.common.serialization.Deserializer;
 
 import com.alibaba.fastjson.JSON;
 
-/** 
+
+/**
  * 自定义反序列化类
+ * 
  * @author yuml
  * @param <T>
  * @since 2019年8月26日
  */
-public class CustomDeSerialize<T> implements Deserializer<T>{
+public class CustomDeserialize<T> implements Deserializer<T> {
 
 	@Override
 	public void configure(Map<String, ?> configs, boolean isKey) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -27,8 +27,6 @@ public class CustomDeSerialize<T> implements Deserializer<T>{
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
