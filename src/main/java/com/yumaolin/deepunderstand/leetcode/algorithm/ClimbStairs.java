@@ -1,9 +1,5 @@
 package com.yumaolin.deepunderstand.leetcode.algorithm;
 
-import java.util.HashMap;
-import java.util.Map;
-
-
 /**
  * 70. 爬楼梯
  * @author yuml
@@ -11,16 +7,26 @@ import java.util.Map;
  */
 public class ClimbStairs {
 
-	private static final Map<Integer, Integer> map = new HashMap<Integer, Integer>(32);
+	private int[] cache = null;
 
 	public int climbStairs(int n) {
+		if(cache == null) {
+			cache = new int[n];
+		} else {
+			int length = cache.length;
+			if(length < n) {
+				int[] newCache = new int[n];
+				System.arraycopy(cache, 0, newCache, 0, cache.length);
+				cache = newCache;
+			}
+		}
 		if (n == 0 || n == 1) {
 			return 1;
 		}
-		Integer a = map.get(n);
-		if (a == null) {
+		int a = cache[n-1];
+		if (a == 0) {
 			a = climbStairs(n - 1) + climbStairs(n - 2);
-			map.put(n, a);
+			cache[n-1] = a;
 		}
 		return a;
 	}
@@ -48,6 +54,8 @@ public class ClimbStairs {
 		ClimbStairs climbStairs = new ClimbStairs();
 		long start = System.currentTimeMillis();
 		System.out.println(climbStairs.climbStairs(44));// 1134903170
+		System.out.println(climbStairs.climbStairs(88));
+		System.out.println(climbStairs.climbStairs2(88));
 		System.out.println(System.currentTimeMillis() - start);
 	}
 }
