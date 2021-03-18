@@ -192,6 +192,12 @@
 		    <version>1.18.8</version>
 		    <scope>provided</scope>
 		</dependency>
+		<!--hutool-->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>5.5.9</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>SpringDeepUnderstand</finalName>
@@ -202,7 +208,7 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-		<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>
+		<!--<scriptSourceDirectory>src/main/scripts</scriptSourceDirectory>-->
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 		<testResources>
 			<testResource>
