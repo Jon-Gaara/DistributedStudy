@@ -1,4 +1,4 @@
-package com.yumaolin.deepunderstand.leetcode.algorithm;
+package com.yumaolin.deepunderstand.leetcode.algorithm.medium;
 
 import java.util.Arrays;
 import java.util.List;
